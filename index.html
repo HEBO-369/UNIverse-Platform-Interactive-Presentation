@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIverse - Project Overview</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #003366;       /* Alex Blue */
+            --primary-dark: #001a33;
+            --accent: #d4af37;        /* Gold */
+            --bg-body: #f4f7f6;
+            --bg-card: #ffffff;
+            --text-dark: #1a1a1a;
+            --text-gray: #555555;
+            --shadow-card: 0 10px 30px rgba(0,0,0,0.08);
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- Scrollbar --- */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #e0e0e0; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+        /* --- Components --- */
+        .btn-main {
+            background: var(--accent);
+            color: var(--primary);
+            padding: 12px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(212, 175, 55, 0.5); }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-outline:hover { background: var(--primary); color: white; }
+
+        .section-header {
+            text-align: center;
+            padding: 60px 20px 40px;
+        }
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .section-header h2::after {
+            content: '';
+            display: block;
+            width: 50%;
+            height: 4px;
+            background: var(--accent);
+            margin: 8px auto 0;
+            border-radius: 2px;
+        }
+        .section-header p { color: var(--text-gray); font-size: 1.1rem; }
+
+        /* --- Nav Dots --- */
+        .nav-dots {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .dot {
+            width: 12px; height: 12px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+        }
+        .dot.active { background: var(--primary); transform: scale(1.3); }
+        .dot:hover::after {
+            content: attr(data-label);
+            position: absolute;
+            left: 25px; top: -5px;
+            background: var(--primary); color: white;
+            padding: 4px 10px; border-radius: 4px;
+            font-size: 0.8rem; white-space: nowrap;
+            opacity: 0; pointer-events: none; transition: 0.3s;
+        }
+        .dot:hover::after { opacity: 1; left: 30px; }
+
+        /* --- 1. Hero Section --- */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary) 0%, #001220 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-content { z-index: 2; animation: fadeUp 1s ease-out; }
+        .hero h1 { font-size: 5rem; margin-bottom: 10px; font-weight: 800; letter-spacing: -2px; }
+        .hero-subtitle { font-size: 1.5rem; opacity: 0.9; margin-bottom: 40px; font-weight: 300; }
+        .hero-icon { font-size: 4rem; color: var(--accent); margin-bottom: 20px; animation: float 3s infinite ease-in-out; }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- 2. System Overview (Grid Layout) --- */
+        .db-section { min-height: 100vh; background: white; padding: 40px 10%; display: flex; flex-direction: column; justify-content: center; }
+        .db-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .db-card {
+            background: var(--bg-body);
+            padding: 30px;
+            border-radius: 15px;
+            border-top: 5px solid var(--primary);
+            box-shadow: var(--shadow-card);
+            transition: var(--transition);
+        }
+        .db-card:hover { transform: translateY(-10px); }
+        .db-card h3 { color: var(--primary); font-size: 1.4rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .db-card ul { list-style: none; }
+        .db-card li { margin-bottom: 12px; padding-left: 20px; position: relative; color: var(--text-gray); font-size: 0.95rem; }
+        .db-card li::before {
+            content: '\f054'; /* FontAwesome Chevron Right */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            font-size: 0.8rem;
+            color: var(--accent);
+        }
+
+        /* --- 3. Authentication Section (Slider) --- */
+        .auth-section { min-height: 100vh; background: var(--bg-body); display: flex; flex-direction: column; }
+        
+        .slider-wrapper {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .slider-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none; 
+            width: 100%;
+            height: 100%;
+        }
+        .slider-container::-webkit-scrollbar { display: none; }
+
+        .slide {
+            flex: 0 0 100vw;
+            scroll-snap-align: start;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5%;
+            gap: 5%;
+        }
+
+        .slide-text { flex: 1; max-width: 500px; padding: 20px; }
+        .slide-text h3 { font-size: 2.2rem; color: var(--primary); margin-bottom: 20px; font-weight: 600; }
+        .slide-text p { font-size: 1.1rem; color: var(--text-gray); margin-bottom: 20px; }
+        
+        .slide-image {
+            flex: 1.2;
+            height: 55vh;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 8px solid white;
+            display: flex;
+            align-items: center; justify-content: center;
+        }
+        .slide-image img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+
+        /* Navigation Buttons */
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px; height: 50px;
+            background: white;
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            cursor: pointer;
+            z-index: 10;
+            border: none;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+        .nav-btn:hover { background: var(--primary); color: white; transform: translateY(-50%) scale(1.1); }
+        .nav-btn.prev { left: 30px; }
+        .nav-btn.next { right: 30px; }
+
+        /* --- 4, 5, 6 User Modules --- */
+        .module-section {
+            min-height: 100vh;
+            border-bottom: 1px solid #ddd;
+            background: white;
+            padding-top: 20px;
+            display: flex; 
+            flex-direction: column;
+        }
+        .module-section:nth-child(even) { background: #f8fafc; }
+
+        /* Feature Page Specifics */
+        .feature-page {
+            flex: 0 0 100vw; scroll-snap-align: start; display: flex;
+            align-items: center; justify-content: space-between; padding: 0 8%;
+            position: relative;
+        }
+        .feature-text { flex: 1; max-width: 550px; padding-right: 40px; z-index: 2; }
+        .feature-number { font-size: 6rem; position: absolute; top: -30px; left: 0; color: rgba(0,0,0,0.03); font-weight: 900; z-index: -1; }
+        .feature-visual { flex: 1.5; height: 60vh; display: flex; align-items: center; justify-content: center; }
+        
+        .feature-img-container {
+            width: 100%; height: 100%; max-height: 500px;
+            background: white; border-radius: 15px; padding: 10px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            border: 1px solid #eee;
+            transform: perspective(1000px) rotateY(5deg);
+            transition: var(--transition);
+        }
+        .feature-img-container:hover { transform: perspective(1000px) rotateY(0deg); }
+        .feature-img { width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 10px; }
+
+        /* --- 7. Conclusion Section --- */
+        .conclusion-box {
+            background: var(--bg-body);
+            padding: 40px;
+            border-radius: 15px;
+            border-left: 5px solid var(--accent);
+            box-shadow: var(--shadow-card);
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        .conclusion-box p {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            line-height: 1.8;
+        }
+
+        /* --- 8. Team Section --- */
+        .team-section { background: var(--primary); color: white; padding: 80px 10%; text-align: center; }
+        .team-container { display: flex; flex-direction: column; gap: 30px; align-items: center; margin-top: 50px; }
+        .team-row { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
+        
+        .team-member {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            width: 250px;
+            transition: var(--transition);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .team-member:hover { background: white; color: var(--primary); transform: translateY(-10px); }
+        .team-member h4 { font-size: 1.2rem; margin-bottom: 5px; font-weight: 600; }
+        .team-member p { opacity: 0.8; font-size: 0.9rem; margin-bottom: 15px; }
+        .github-link {
+            color: inherit;
+            font-size: 1.5rem;
+            transition: 0.3s;
+            display: inline-block;
+        }
+        .team-member:hover .github-link { color: var(--primary); }
+        .github-link:hover { transform: scale(1.2); color: var(--accent) !important; }
+
+        /* Footer */
+        footer { text-align: center; padding: 20px; background: #111; color: #888; font-size: 0.9rem; }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .slide, .feature-page { flex-direction: column; text-align: center; padding-top: 20px; gap: 30px; }
+            .slide-text, .feature-text { padding: 0; width: 100%; margin: 0; }
+            .slide-image, .feature-visual { width: 100%; height: 40vh; flex: none; }
+            .feature-img-container { transform: none; }
+            .nav-dots { display: none; }
+            .team-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Nav Dots -->
+    <div class="nav-dots">
+        <div class="dot active" data-target="home" data-label="Home" onclick="scrollToId('home')"></div>
+        <div class="dot" data-target="db" data-label="Architecture" onclick="scrollToId('db')"></div>
+        <div class="dot" data-target="auth" data-label="Authentication" onclick="scrollToId('auth')"></div>
+        <div class="dot" data-target="supervisor" data-label="Supervisor" onclick="scrollToId('supervisor')"></div>
+        <div class="dot" data-target="doctor" data-label="Doctor" onclick="scrollToId('doctor')"></div>
+        <div class="dot" data-target="student" data-label="Student" onclick="scrollToId('student')"></div>
+        <div class="dot" data-target="conclusion" data-label="Conclusion" onclick="scrollToId('conclusion')"></div>
+        <div class="dot" data-target="team" data-label="Team" onclick="scrollToId('team')"></div>
+    </div>
+
+    <!-- 1. Hero -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <i class="fas fa-university hero-icon"></i>
+            <h1>UNIverse Platform</h1>
+            <p class="hero-subtitle">Integrated University Management System - HCI Fall 2025</p>
+            <button onclick="scrollToId('db')" class="btn-main">Start Presentation <i class="fas fa-arrow-down"></i></button>
+        </div>
+    </section>
+
+    <!-- 2. System Overview -->
+    <section id="db" class="db-section">
+        <div class="section-header">
+            <h2><i class="fas fa-cogs"></i> System Architecture</h2>
+            <p>A relational design ensuring data integrity and efficient management</p>
+        </div>
+        <div class="db-grid">
+            <div class="db-card">
+                <h3><i class="fas fa-users"></i> User Management</h3>
+                <ul>
+                    <li><strong>Unified Access:</strong> Secure login for all roles.</li>
+                    <li><strong>Faculty Data:</strong> Doctors & Teaching Assistants.</li>
+                    <li><strong>Student Records:</strong> GPA, Levels, and Groups.</li>
+                </ul>
+            </div>
+            <div class="db-card">
+                <h3><i class="fas fa-book-open"></i> Academic Structure</h3>
+                <ul>
+                    <li><strong>Course Catalog:</strong> Departments and subjects.</li>
+                    <li><strong>Enrollments:</strong> Managing student registrations.</li>
+                    <li><strong>Scheduling:</strong> Timetables and slot allocation.</li>
+                </ul>
+            </div>
+            <div class="db-card">
+                <h3><i class="fas fa-tasks"></i> Activities Tracking</h3>
+                <ul>
+                    <li><strong>Assessments:</strong> Assignments and deadlines.</li>
+                    <li><strong>Performance:</strong> Grading and submission tracking.</li>
+                    <li><strong>Resources:</strong> Lecture notes and materials.</li>
+                </ul>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 40px;">
+            <button onclick="scrollToId('auth')" class="btn-outline">Next: Authentication <i class="fas fa-chevron-down"></i></button>
+        </div>
+    </section>
+
+    <!-- 3. Authentication -->
+    <section id="auth" class="auth-section">
+        <div class="section-header">
+            <h2><i class="fas fa-shield-alt"></i> Authentication & Security</h2>
+            <p>Secure access control using modern JWT standards</p>
+        </div>
+        <div class="slider-wrapper">
+            <button class="nav-btn prev" onclick="scrollSlider('auth-slider', 'prev')"><i class="fas fa-chevron-left"></i></button>
+            <button class="nav-btn next" onclick="scrollSlider('auth-slider', 'next')"><i class="fas fa-chevron-right"></i></button>
+            
+            <div class="slider-container" id="auth-slider">
+                <!-- Login -->
+                <div class="slide">
+                    <div class="slide-text">
+                        <h3>Unified Login</h3>
+                        <p>A single entry point for all users. The system identifies the user's role dynamically and redirects them to their personalized dashboard.</p>
+                    </div>
+                    <div class="slide-image">
+                        <img src="0.jpeg" alt="Login Page">
+                    </div>
+                </div>
+                <!-- Signup -->
+                <div class="slide">
+                    <div class="slide-text">
+                        <h3>Easy Registration</h3>
+                        <p>Dedicated registration portals ensure accurate data collection. Students provide academic details like their department and group during sign-up.</p>
+                    </div>
+                    <div class="slide-image">
+                        <img src="00.jpeg" alt="Signup Page">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px; padding-bottom: 40px;">
+            <button onclick="scrollToId('supervisor')" class="btn-outline">Next: Supervisor Module <i class="fas fa-chevron-down"></i></button>
+        </div>
+    </section>
+
+    <!-- 4. Supervisor Module -->
+    <section id="supervisor" class="module-section">
+        <div class="section-header">
+            <h2>Supervisor Module</h2>
+            <p>Infrastructure & Administration Management</p>
+        </div>
+        <div class="slider-wrapper">
+            <button class="nav-btn prev" onclick="scrollSlider('sup-slider', 'prev')"><i class="fas fa-chevron-left"></i></button>
+            <button class="nav-btn next" onclick="scrollSlider('sup-slider', 'next')"><i class="fas fa-chevron-right"></i></button>
+            
+            <div class="slider-container" id="sup-slider">
+                <!-- 1. Dashboard -->
+                <div class="feature-page">
+                    <div class="feature-text">
+                        <span class="feature-number">01</span>
+                        <h3>System Dashboard</h3>
+                        <p>Provides a high-level statistical overview of the system. It displays the total count of registered doctors, students, and active courses.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="feature-img-container"><img src="1.png" class="feature-img"></div>
+                    </div>
+                </div>
+                <!-- 2. Available Courses -->
+                <div class="feature-page">
+                    <div class="feature-text">
+                        <span class="feature-number">02</span>
+                        <h3>Available Courses</h3>
+                        <p>The supervisor defines which courses are offered in the current semester. This toggles the visibility of courses for student registration.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="feature-img-container"><img src="2.png" class="feature-img"></div>
+                    </div>
+                </div>
+                <!-- 3. Generate Timetable -->
+                <div class="feature-page">
+                    <div class="feature-text">
+                        <span class="feature-number">03</span>
+                        <h3>Generate Timetable</h3>
+                        <p>An automated tool to assign time slots to courses for different student groups, preventing time conflicts.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="feature-img-container"><img src="3.png" class="feature-img"></div>
+                    </div>
+                </div>
+                <!-- 4. Manage Faculty -->
+                <div class="feature-page">
+                    <div class="feature-text">
+                        <span class="feature-number">04</span>
+                        <h3>Manage Faculty</h3>
+                        <p>Allows the supervisor to register new Doctors and Teaching Assistants. The system generates a default password and assigns the appropriate role.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="feature-img-container"><img src="4.png" class="feature-img"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px; padding-bottom: 40px;">
+            <button onclick="scrollToId('doctor')" class="btn-outline">Next: Academic Staff <i class="fas fa-chevron-down"></i></button>
+        </div>
+    </section>
+
+    <!-- 5. Doctor Module -->
+    <section id="doctor" class="module-section">
+        <div class="section-header">
+            <h2>Academic Staff Module</h2>
+            <p>Content Delivery & Student Assessment</p>
+        </div>
+        <div class="slider-wrapper">
+            <button class="nav-btn prev" onclick="scrollSlider('doc-slider', 'prev')"><i class="fas fa-chevron-left"></i></button>
+            <button class="nav-btn next" onclick="scrollSlider('doc-slider', 'next')"><i class="fas fa-chevron-right"></i></button>
+            
+            <div class="slider-container" id="doc-slider">
+                <!-- 1. Dashboard -->
+                <div class="feature-page">
+                    <div class="feature-text">
+                        <span class="feature-number">01</span>
+                        <h3>Doctor Dashboard</h3>
+                        <p>A personalized landing page listing the courses assigned to the doctor. It acts as a gateway to manage each course.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="feature-img-container"><img src="11.png" class="feature-img"></div>
+                    </div>
+                </div>
+                <!-- 2. Course Details -->
+                <div class="feature-page">
+                    <div class="feature-text">
+                        <span class="feature-number">02</span>
+                        <h3>Course Details</h3>
+                        <p>The central hub for a specific course. It displays metadata (code, credit hours) and lists all enrolled students.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="feature-img-container"><img src="66.png" class="feature-img"></div>
+                    </div>
+                </div>
+                <!-- 3. Upload Material -->
+                <div class="feature-page">
+                    <div class="feature-text">
+                        <span class="feature-number">03</span>
+                        <h3>Upload Material</h3>
+                        <p>Allows the doctor to upload lectures, labs, and supplementary PDFs for students.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="feature-img-container"><img src="33.png" class="feature-img"></div>
+                    </div>
+                </div>
+                <!-- 4. Add Assignment -->
+                <div class="feature-page">
+                    <div class="feature-text">
+                        <span class="feature-number">04</span>
+                        <h3>Add Assignment</h3>
+                        <p>Doctors can create new tasks with specific deadlines and descriptions.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="feature-img-container"><img src="44.png" class="feature-img"></div>
+                    </div>
+                </div>
+                <!-- 5. View Assignment (Submissions) -->
+                <div class="feature-page">
+                    <div class="feature-text">
+                        <span class="feature-number">05</span>
+                        <h3>View Submissions</h3>
+                        <p>A view to see which students have submitted their work, download their files, and grade them.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="feature-img-container"><img src="55.png" class="feature-img"></div>
+                    </div>
+                </div>
+                <!-- 6. View Announcements -->
+                <div class="feature-page">
+                    <div class="feature-text">
+                        <span class="feature-number">06</span>
+                        <h3>View Announcements</h3>
+                        <p>Doctors can view and manage the history of announcements sent to students in this course.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="feature-img-container"><img src="22.png" class="feature-img"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px; padding-bottom: 40px;">
+            <button onclick="scrollToId('student')" class="btn-outline">Next: Student Module <i class="fas fa-chevron-down"></i></button>
+        </div>
+    </section>
+
+    <!-- 6. Student Module -->
+    <section id="student" class="module-section">
+        <div class="section-header">
+            <h2>Student Module</h2>
+            <p>Learning & Progress Tracking</p>
+        </div>
+        <div class="slider-wrapper">
+            <button class="nav-btn prev" onclick="scrollSlider('stu-slider', 'prev')"><i class="fas fa-chevron-left"></i></button>
+            <button class="nav-btn next" onclick="scrollSlider('stu-slider', 'next')"><i class="fas fa-chevron-right"></i></button>
+            
+            <div class="slider-container" id="stu-slider">
+                <!-- 1. Dashboard -->
+                <div class="feature-page">
+                    <div class="feature-text">
+                        <span class="feature-number">01</span>
+                        <h3>Student Dashboard</h3>
+                        <p>Shows the student's current enrollment status and quick links to their active courses.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="feature-img-container"><img src="111.png" class="feature-img"></div>
+                    </div>
+                </div>
+                <!-- 2. My Courses -->
+                <div class="feature-page">
+                    <div class="feature-text">
+                        <span class="feature-number">02</span>
+                        <h3>My Courses</h3>
+                        <p>Displays a grid of courses the student is registered in. Clicking a course navigates to its specific materials and tasks.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="feature-img-container"><img src="222.png" class="feature-img"></div>
+                    </div>
+                </div>
+                <!-- 3. View Schedule -->
+                <div class="feature-page">
+                    <div class="feature-text">
+                        <span class="feature-number">03</span>
+                        <h3>View Schedule</h3>
+                        <p>Displays the weekly timetable for the student's specific group (lectures and labs).</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="feature-img-container"><img src="333.png" class="feature-img"></div>
+                    </div>
+                </div>
+                <!-- 4. View Assignment (Submit) -->
+                <div class="feature-page">
+                    <div class="feature-text">
+                        <span class="feature-number">04</span>
+                        <h3>Submit Assignments</h3>
+                        <p>An interface to view pending assignments and upload solutions.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="feature-img-container"><img src="444.png" class="feature-img"></div>
+                    </div>
+                </div>
+                <!-- 5. View Grades -->
+                <div class="feature-page">
+                    <div class="feature-text">
+                        <span class="feature-number">05</span>
+                        <h3>View Grades</h3>
+                        <p>A gradebook view showing marks received for various assignments and exams.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="feature-img-container"><img src="555.png" class="feature-img"></div>
+                    </div>
+                </div>
+                <!-- 6. View Material -->
+                <div class="feature-page">
+                    <div class="feature-text">
+                        <span class="feature-number">06</span>
+                        <h3>View Material</h3>
+                        <p>A repository view where students can download PDFs and slides uploaded by the doctor.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="feature-img-container"><img src="666.png" class="feature-img"></div>
+                    </div>
+                </div>
+                <!-- 7. View Announcements -->
+                <div class="feature-page">
+                    <div class="feature-text">
+                        <span class="feature-number">07</span>
+                        <h3>View Announcements</h3>
+                        <p>A feed of updates sent by course instructors regarding exams or lectures.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="feature-img-container"><img src="777.png" class="feature-img"></div>
+                    </div>
+                </div>
+                <!-- 8. Questions (Q&A) -->
+                <div class="feature-page">
+                    <div class="feature-text">
+                        <span class="feature-number">08</span>
+                        <h3>Questions (Q&A)</h3>
+                        <p>A forum-like feature allowing students to ask questions to the staff and view answers.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="feature-img-container"><img src="888.png" class="feature-img"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px; padding-bottom: 40px;">
+            <button onclick="scrollToId('conclusion')" class="btn-outline">Next: Conclusion <i class="fas fa-chevron-down"></i></button>
+        </div>
+    </section>
+
+    <!-- 7. Conclusion Section -->
+    <section id="conclusion" class="db-section">
+        <div class="section-header">
+            <h2>Conclusion</h2>
+            <p>Final Remarks & Project Outcome</p>
+        </div>
+        <div class="conclusion-box">
+            <p>
+                Phase 4 of the UNIverse project successfully integrated the backend logic with the frontend interfaces. The database design supports strict data integrity across all modules. By separating the interfaces for Supervisors, Doctors, and Students, the system ensures a secure and optimized user experience for each role, fulfilling the academic management requirements effectively.
+            </p>
+        </div>
+        <div style="text-align: center; margin-top: 40px;">
+            <button onclick="scrollToId('team')" class="btn-outline">Meet The Team <i class="fas fa-chevron-down"></i></button>
+        </div>
+    </section>
+
+    <!-- 8. Team -->
+    <section id="team" class="team-section">
+        <h2>Meet The Team</h2>
+        <p>Faculty of Engineering - Alexandria University</p>
+        
+        <div class="team-container">
+            <!-- Row 1: Girls -->
+            <div class="team-row">
+                <div class="team-member">
+                    <h4>Jana Rashed</h4>
+                    <p>23010359</p>
+                    <a href="https://github.com/janamirashed" target="_blank" class="github-link"><i class="fab fa-github"></i></a>
+                </div>
+                <div class="team-member">
+                    <h4>Nour Ahmed</h4>
+                    <p>23010913</p>
+                    <a href="https://github.com/nourr-ahmed" target="_blank" class="github-link"><i class="fab fa-github"></i></a>
+                </div>
+                <div class="team-member">
+                    <h4>Esraa Abdelhay</h4>
+                    <p>23010276</p>
+                    <a href="https://github.com/esraaabdelhaye" target="_blank" class="github-link"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+
+            <!-- Row 2: Boys -->
+            <div class="team-row">
+                <div class="team-member">
+                    <h4>Youssef Ali</h4>
+                    <p>23010999</p>
+                    <a href="https://github.com/YoussefRashidy" target="_blank" class="github-link"><i class="fab fa-github"></i></a>
+                </div>
+                <div class="team-member" style="width: auto;">
+                    <h4>Mohamed Wahban</h4>
+                    <p>23010729</p>
+                    <a href="https://github.com/HEBO-369" target="_blank" class="github-link"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 50px;">
+            <button onclick="scrollToId('home')" class="btn-main">Back to Top <i class="fas fa-arrow-up"></i></button>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 UNIverse Platform | Alexandria University</p>
+    </footer>
+
+    <!-- Logic -->
+    <script>
+        const sections = ['home', 'db', 'auth', 'supervisor', 'doctor', 'student', 'conclusion', 'team'];
+        let currentSectionIndex = 0;
+
+        function scrollToId(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollSlider(sliderId, direction) {
+            const slider = document.getElementById(sliderId);
+            const width = window.innerWidth;
+            
+            if(direction === 'next') {
+                slider.scrollBy({ left: width, behavior: 'smooth' });
+            } else {
+                slider.scrollBy({ left: -width, behavior: 'smooth' });
+            }
+        }
+
+        // Active Dot Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    currentSectionIndex = sections.indexOf(id);
+                    document.querySelectorAll('.dot').forEach(dot => {
+                        dot.classList.toggle('active', dot.dataset.target === id);
+                    });
+                }
+            });
+        }, { threshold: 0.4 });
+
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) observer.observe(el);
+        });
+
+        // Keyboard Logic
+        document.addEventListener('keydown', (e) => {
+            // Vertical
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (currentSectionIndex < sections.length - 1) {
+                    currentSectionIndex++;
+                    scrollToId(sections[currentSectionIndex]);
+                }
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (currentSectionIndex > 0) {
+                    currentSectionIndex--;
+                    scrollToId(sections[currentSectionIndex]);
+                }
+            }
+
+            // Slider Nav (Horizontal)
+            const currentId = sections[currentSectionIndex];
+            let sliderId = null;
+            if (currentId === 'auth') sliderId = 'auth-slider';
+            if (currentId === 'supervisor') sliderId = 'sup-slider';
+            if (currentId === 'doctor') sliderId = 'doc-slider';
+            if (currentId === 'student') sliderId = 'stu-slider';
+
+            if (sliderId) {
+                if (e.key === 'ArrowRight') scrollSlider(sliderId, 'next');
+                if (e.key === 'ArrowLeft') scrollSlider(sliderId, 'prev');
+            }
+        });
+    </script>
+</body>
+</html>
